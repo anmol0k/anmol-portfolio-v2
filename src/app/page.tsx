@@ -11,6 +11,7 @@ import Education from "@/components/sections/Education";
 import Projects from "@/components/sections/Projects";
 import Achievements from "@/components/sections/Achievements";
 import Contact from "@/components/sections/Contact";
+import Testimonials from "@/components/sections/Testimonials";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <Education />
         <Projects />
         <Achievements />
+        <Testimonials />
         <Contact />
         <Footer />
       </div>

@@ -12,6 +12,7 @@ type UploadPurpose =
   | "profile-image"
   | "project-image"
   | "achievement-image"
+  | "testimonial-image"
   | "resume";
 
 type UploadConfig = {
@@ -37,6 +38,19 @@ const uploadConfigs: Record<
     ],
     resourceType: "image",
   },
+
+  "testimonial-image": {
+  folder:
+    "anmol-portfolio/testimonials",
+  maxSize:
+    5 * 1024 * 1024,
+  allowedTypes: [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ],
+  resourceType: "image",
+},
 
   "project-image": {
     folder:

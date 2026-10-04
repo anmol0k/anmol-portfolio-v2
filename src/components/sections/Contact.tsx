@@ -241,7 +241,7 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-14">
           <p className="mb-3 text-xs uppercase tracking-[0.35em] text-cyan-400">
-            07 / Contact
+            08 / Contact
           </p>
 
           <h2 className="max-w-4xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">

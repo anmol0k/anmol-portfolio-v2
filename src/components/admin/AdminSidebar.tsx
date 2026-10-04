@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import {
+  usePathname,
+  useRouter,
+} from "next/navigation";
 import Link from "next/link";
 
 import {
@@ -13,6 +16,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  MessageSquareQuote,
   Monitor,
   UserRound,
   Wrench,
@@ -56,6 +60,11 @@ const navigation = [
     icon: Award,
   },
   {
+    label: "Testimonials",
+    href: "/admin/testimonials",
+    icon: MessageSquareQuote,
+  },
+  {
     label: "Messages",
     href: "/admin/messages",
     icon: Mail,
@@ -63,47 +72,73 @@ const navigation = [
 ];
 
 export default function AdminSidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname =
+    usePathname();
 
-  const [mobileOpen, setMobileOpen] =
-    useState(false);
+  const router =
+    useRouter();
 
-  const [loggingOut, setLoggingOut] =
-    useState(false);
+  const [
+    mobileOpen,
+    setMobileOpen,
+  ] = useState(false);
+
+  const [
+    loggingOut,
+    setLoggingOut,
+  ] = useState(false);
 
   async function handleLogout() {
     try {
       setLoggingOut(true);
 
-      await fetch("/api/admin/logout", {
-        method: "POST",
-      });
+      await fetch(
+        "/api/admin/logout",
+        {
+          method: "POST",
+        }
+      );
 
-      router.push("/admin/login");
+      router.push(
+        "/admin/login"
+      );
+
       router.refresh();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error(
+        "Logout error:",
+        error
+      );
     } finally {
       setLoggingOut(false);
     }
   }
 
-  function isActive(href: string) {
-    if (href === "/admin/dashboard") {
-      return pathname === href;
+  function isActive(
+    href: string
+  ) {
+    if (
+      href ===
+      "/admin/dashboard"
+    ) {
+      return (
+        pathname === href
+      );
     }
 
-    return pathname.startsWith(href);
+    return pathname.startsWith(
+      href
+    );
   }
 
   const sidebarContent = (
     <div className="flex h-full flex-col">
-      {/* Logo */}
       <div className="border-b border-white/10 px-5 py-6">
         <Link
           href="/admin/dashboard"
-          onClick={() => setMobileOpen(false)}
+          onClick={() =>
+            setMobileOpen(false)
+          }
           className="block"
         >
           <p className="text-xs uppercase tracking-[0.3em] text-cyan-400">
@@ -116,41 +151,60 @@ export default function AdminSidebar() {
         </Link>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-5">
         <div className="space-y-1">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href);
+          {navigation.map(
+            (item) => {
+              const Icon =
+                item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() =>
-                  setMobileOpen(false)
-                }
-                className={`flex items-center gap-3 px-4 py-3 text-sm transition ${
-                  active
-                    ? "bg-cyan-400 text-black"
-                    : "text-white/45 hover:bg-white/[0.04] hover:text-white"
-                }`}
-              >
-                <Icon size={17} />
+              const active =
+                isActive(
+                  item.href
+                );
 
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={
+                    item.href
+                  }
+                  href={
+                    item.href
+                  }
+                  onClick={() =>
+                    setMobileOpen(
+                      false
+                    )
+                  }
+                  className={`flex items-center gap-3 px-4 py-3 text-sm transition ${
+                    active
+                      ? "bg-cyan-400 text-black"
+                      : "text-white/45 hover:bg-white/[0.04] hover:text-white"
+                  }`}
+                >
+                  <Icon
+                    size={17}
+                  />
+
+                  <span>
+                    {
+                      item.label
+                    }
+                  </span>
+                </Link>
+              );
+            }
+          )}
         </div>
       </nav>
 
-      {/* Bottom actions */}
       <div className="border-t border-white/10 p-3">
         <Link
           href="/"
           target="_blank"
-          onClick={() => setMobileOpen(false)}
+          onClick={() =>
+            setMobileOpen(false)
+          }
           className="mb-2 flex items-center gap-3 px-4 py-3 text-sm text-white/45 transition hover:bg-white/[0.04] hover:text-white"
         >
           <Monitor size={17} />
@@ -160,8 +214,12 @@ export default function AdminSidebar() {
 
         <button
           type="button"
-          onClick={handleLogout}
-          disabled={loggingOut}
+          onClick={
+            handleLogout
+          }
+          disabled={
+            loggingOut
+          }
           className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-300/60 transition hover:bg-red-500/[0.05] hover:text-red-300 disabled:opacity-40"
         >
           <LogOut size={17} />
@@ -176,12 +234,10 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-64 border-r border-white/10 bg-[#080808] lg:block">
         {sidebarContent}
       </aside>
 
-      {/* Mobile Header */}
       <div className="fixed left-0 right-0 top-0 z-40 flex h-16 items-center justify-between border-b border-white/10 bg-[#080808]/95 px-4 backdrop-blur lg:hidden">
         <Link
           href="/admin/dashboard"
@@ -193,7 +249,10 @@ export default function AdminSidebar() {
         <button
           type="button"
           onClick={() =>
-            setMobileOpen((current) => !current)
+            setMobileOpen(
+              (current) =>
+                !current
+            )
           }
           className="flex h-10 w-10 items-center justify-center border border-white/10 text-white/70"
           aria-label="Toggle admin navigation"
@@ -201,25 +260,30 @@ export default function AdminSidebar() {
           {mobileOpen ? (
             <X size={19} />
           ) : (
-            <Menu size={19} />
+            <Menu
+              size={19}
+            />
           )}
         </button>
       </div>
 
-      {/* Mobile Sidebar */}
       {mobileOpen && (
         <>
           <button
             type="button"
             aria-label="Close menu"
             onClick={() =>
-              setMobileOpen(false)
+              setMobileOpen(
+                false
+              )
             }
             className="fixed inset-0 z-40 bg-black/70 lg:hidden"
           />
 
           <aside className="fixed bottom-0 left-0 top-0 z-50 w-[280px] max-w-[85vw] border-r border-white/10 bg-[#080808] lg:hidden">
-            {sidebarContent}
+            {
+              sidebarContent
+            }
           </aside>
         </>
       )}

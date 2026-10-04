@@ -11,7 +11,36 @@ import {
   motion,
 } from "motion/react";
 
-import { ChevronDown } from "lucide-react";
+import {
+  Braces,
+  ChevronDown,
+  Code2,
+  Database,
+  Server,
+  Wrench,
+} from "lucide-react";
+
+import {
+  SiBootstrap,
+  SiCloudinary,
+  SiCss,
+  SiExpress,
+  SiGit,
+  SiGithub,
+  SiHtml5,
+  SiJavascript,
+  SiMongodb,
+  SiMysql,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPhp,
+  SiPostgresql,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+  SiVercel,
+  SiWordpress,
+} from "react-icons/si";
 
 type Skill = {
   _id: string;
@@ -21,6 +50,320 @@ type Skill = {
   order: number;
   isActive: boolean;
 };
+
+type DisplaySkill = {
+  id: string;
+  name: string;
+  category: string;
+  icon: string;
+};
+
+const skillDefinitions = [
+  {
+    names: ["Tailwind CSS", "Tailwind"],
+    icon: "tailwindcss",
+  },
+  {
+    names: ["REST APIs", "REST API"],
+    icon: "restapi",
+  },
+  {
+    names: ["React.js", "ReactJS", "React"],
+    icon: "react",
+  },
+  {
+    names: ["Next.js", "NextJS", "Next"],
+    icon: "nextjs",
+  },
+  {
+    names: ["Node.js", "NodeJS", "Node"],
+    icon: "nodejs",
+  },
+  {
+    names: ["Express.js", "ExpressJS", "Express"],
+    icon: "express",
+  },
+  {
+    names: ["JavaScript"],
+    icon: "javascript",
+  },
+  {
+    names: ["TypeScript"],
+    icon: "typescript",
+  },
+  {
+    names: ["PostgreSQL"],
+    icon: "postgresql",
+  },
+  {
+    names: ["MongoDB"],
+    icon: "mongodb",
+  },
+  {
+    names: ["Bootstrap"],
+    icon: "bootstrap",
+  },
+  {
+    names: ["Cloudinary"],
+    icon: "cloudinary",
+  },
+  {
+    names: ["WordPress"],
+    icon: "wordpress",
+  },
+  {
+    names: ["GitHub"],
+    icon: "github",
+  },
+  {
+    names: ["HTML5", "HTML"],
+    icon: "html5",
+  },
+  {
+    names: ["CSS3", "CSS"],
+    icon: "css3",
+  },
+  {
+    names: ["MySQL"],
+    icon: "mysql",
+  },
+  {
+    names: ["PHP"],
+    icon: "php",
+  },
+  {
+    names: ["Vercel"],
+    icon: "vercel",
+  },
+  {
+    names: ["Git"],
+    icon: "git",
+  },
+];
+
+const skillIconMap = {
+  html5: SiHtml5,
+  html: SiHtml5,
+
+  css3: SiCss,
+  css: SiCss,
+
+  javascript: SiJavascript,
+  js: SiJavascript,
+
+  typescript: SiTypescript,
+  ts: SiTypescript,
+
+  react: SiReact,
+  reactjs: SiReact,
+
+  nextjs: SiNextdotjs,
+  next: SiNextdotjs,
+
+  bootstrap: SiBootstrap,
+
+  tailwind: SiTailwindcss,
+  tailwindcss: SiTailwindcss,
+
+  nodejs: SiNodedotjs,
+  node: SiNodedotjs,
+
+  express: SiExpress,
+  expressjs: SiExpress,
+
+  php: SiPhp,
+
+  mongodb: SiMongodb,
+  mongo: SiMongodb,
+
+  mysql: SiMysql,
+
+  postgresql: SiPostgresql,
+  postgres: SiPostgresql,
+
+  wordpress: SiWordpress,
+
+  git: SiGit,
+  github: SiGithub,
+
+  vercel: SiVercel,
+
+  cloudinary: SiCloudinary,
+
+  api: Braces,
+  restapi: Braces,
+  restapis: Braces,
+
+  code: Code2,
+  server: Server,
+  database: Database,
+  wrench: Wrench,
+};
+
+function normalizeIconName(
+  value: string
+) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[\s._-]/g, "");
+}
+
+function findTechnologyIcon(
+  technology: string
+) {
+  const normalized =
+    technology
+      .trim()
+      .toLowerCase();
+
+  for (const definition of skillDefinitions) {
+    if (
+      definition.names.some(
+        (name) =>
+          name.toLowerCase() ===
+          normalized
+      )
+    ) {
+      return definition.icon;
+    }
+  }
+
+  return "code";
+}
+
+function getSkillIcon(
+  name: string,
+  icon: string
+) {
+  /*
+   * Prefer the technology name.
+   * This means React will show React's
+   * logo even if the old database
+   * record contains "code".
+   */
+  const technologyIcon =
+    findTechnologyIcon(name);
+
+  const key =
+    technologyIcon !== "code"
+      ? technologyIcon
+      : normalizeIconName(
+          icon || "code"
+        );
+
+  return (
+    skillIconMap[
+      key as keyof typeof skillIconMap
+    ] || Code2
+  );
+}
+
+function splitCombinedSkill(
+  skill: Skill
+): DisplaySkill[] {
+  const value =
+    skill.name.trim();
+
+  /*
+   * First support clean comma-separated
+   * records if you use them later.
+   */
+  if (value.includes(",")) {
+    return value
+      .split(",")
+      .map((name) =>
+        name.trim()
+      )
+      .filter(Boolean)
+      .map(
+        (
+          name,
+          index
+        ) => ({
+          id: `${skill._id}-${index}`,
+          name,
+          category:
+            skill.category,
+          icon:
+            findTechnologyIcon(
+              name
+            ),
+        })
+      );
+  }
+
+  /*
+   * Supports your existing records such as:
+   *
+   * HTML5 CSS3 JavaScript TypeScript
+   * React.js Next.js Bootstrap Tailwind CSS
+   */
+  let remaining = value;
+
+  const found:
+    DisplaySkill[] = [];
+
+  for (const definition of skillDefinitions) {
+    for (const alias of definition.names) {
+      const escaped =
+        alias.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        );
+
+      const regex =
+        new RegExp(
+          `(^|\\s)${escaped}(?=\\s|$)`,
+          "i"
+        );
+
+      if (regex.test(remaining)) {
+        found.push({
+          id: `${skill._id}-${found.length}`,
+          name:
+            definition.names[0],
+          category:
+            skill.category,
+          icon:
+            definition.icon,
+        });
+
+        remaining =
+          remaining
+            .replace(
+              regex,
+              " "
+            )
+            .replace(
+              /\s+/g,
+              " "
+            )
+            .trim();
+
+        break;
+      }
+    }
+  }
+
+  if (found.length > 1) {
+    return found;
+  }
+
+  return [
+    {
+      id: skill._id,
+      name: skill.name,
+      category:
+        skill.category,
+      icon:
+        skill.icon ||
+        findTechnologyIcon(
+          skill.name
+        ),
+    },
+  ];
+}
 
 export default function Skills() {
   const [skills, setSkills] =
@@ -65,12 +408,8 @@ export default function Skills() {
           );
         }
 
-        const loadedSkills:
-          Skill[] =
-          data.skills || [];
-
         setSkills(
-          loadedSkills
+          data.skills || []
         );
       } catch (error) {
         console.error(
@@ -85,29 +424,46 @@ export default function Skills() {
     loadSkills();
   }, []);
 
+  const displaySkills =
+    useMemo(() => {
+      return skills.flatMap(
+        splitCombinedSkill
+      );
+    }, [skills]);
+
   const categories =
     useMemo(() => {
       return Array.from(
         new Set(
-          skills.map(
+          displaySkills.map(
             (skill) =>
               skill.category
           )
         )
       );
-    }, [skills]);
+    }, [displaySkills]);
 
   const activeSkills =
     useMemo(() => {
-      return skills.filter(
+      return displaySkills.filter(
         (skill) =>
           skill.category ===
           activeCategory
       );
     }, [
-      skills,
+      displaySkills,
       activeCategory,
     ]);
+
+  function getSkillsByCategory(
+    category: string
+  ) {
+    return displaySkills.filter(
+      (skill) =>
+        skill.category ===
+        category
+    );
+  }
 
   function handleDesktopEnter(
     category: string
@@ -134,16 +490,6 @@ export default function Skills() {
     );
   }
 
-  function getSkillsByCategory(
-    category: string
-  ) {
-    return skills.filter(
-      (skill) =>
-        skill.category ===
-        category
-    );
-  }
-
   if (loading) {
     return (
       <section
@@ -161,7 +507,8 @@ export default function Skills() {
   }
 
   if (
-    skills.length === 0
+    displaySkills.length ===
+    0
   ) {
     return null;
   }
@@ -260,9 +607,7 @@ export default function Skills() {
                     </div>
 
                     <ChevronDown
-                      size={
-                        18
-                      }
+                      size={18}
                       className={`shrink-0 text-white/30 transition-transform duration-300 ${
                         open
                           ? "rotate-180 text-cyan-400"
@@ -272,9 +617,7 @@ export default function Skills() {
                   </button>
 
                   <AnimatePresence
-                    initial={
-                      false
-                    }
+                    initial={false}
                   >
                     {open && (
                       <motion.div
@@ -459,7 +802,7 @@ export default function Skills() {
                     }}
                     className="sticky top-28"
                   >
-                    <div className="border border-white/10 bg-white/[0.02] p-8">
+                    <div className="border border-white/10 bg-white/[0.02] p-6 sm:p-8">
                       <SkillGrid
                         category={
                           activeCategory
@@ -504,11 +847,11 @@ function SkillGrid({
   skills,
 }: {
   category: string;
-  skills: Skill[];
+  skills: DisplaySkill[];
 }) {
   return (
     <>
-      <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-5">
+      <div className="mb-7 flex items-center justify-between border-b border-white/10 pb-5">
         <div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-white/25">
             Active Category
@@ -531,28 +874,34 @@ function SkillGrid({
 
       <div className="grid gap-3 sm:grid-cols-2">
         {skills.map(
-          (skill) => (
-            <div
-              key={
-                skill._id
-              }
-              className="border border-white/10 bg-black/20 px-4 py-4 transition hover:border-cyan-400/20 hover:bg-cyan-400/[0.025]"
-            >
-              <p className="text-sm font-medium text-white/80">
-                {
-                  skill.name
-                }
-              </p>
+          (skill) => {
+            const Icon =
+              getSkillIcon(
+                skill.name,
+                skill.icon
+              );
 
-              {skill.icon && (
-                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/20">
+            return (
+              <div
+                key={
+                  skill.id
+                }
+                className="group flex min-h-[78px] items-center gap-4 border border-white/10 bg-black/20 px-4 py-4 transition hover:border-cyan-400/30 hover:bg-cyan-400/[0.025]"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/10 bg-white/[0.02] text-cyan-400 transition group-hover:border-cyan-400/30">
+                  <Icon
+                    size={22}
+                  />
+                </div>
+
+                <p className="min-w-0 text-sm font-medium text-white/75 transition group-hover:text-white">
                   {
-                    skill.icon
+                    skill.name
                   }
                 </p>
-              )}
-            </div>
-          )
+              </div>
+            );
+          }
         )}
       </div>
     </>
