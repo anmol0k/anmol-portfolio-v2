@@ -32,8 +32,8 @@ export default function InteractiveTitle({
       onMouseLeave={onHoverEnd}
       data-cursor="interactive"
     >
-      <div className="flex w-full flex-col">
-        <div className="flex w-full overflow-hidden">
+      <div className="flex flex-col">
+        <div className="flex overflow-hidden">
           {firstName.split("").map((letter, index) => (
             <motion.span
               key={`${letter}-${index}`}
@@ -46,14 +46,14 @@ export default function InteractiveTitle({
                 stiffness: 300,
                 damping: 20,
               }}
-              className="inline-block flex-1 cursor-default select-none text-center text-[17vw] font-semibold leading-[0.82] tracking-[-0.08em] text-white sm:text-[16vw] lg:text-[11.5vw]"
+              className="inline-block cursor-default select-none text-[17vw] font-semibold leading-[0.82] tracking-[-0.08em] text-white sm:text-[16vw] lg:text-[10vw] xl:text-[9vw]"
             >
               {letter}
             </motion.span>
           ))}
         </div>
 
-        <div className="flex w-full overflow-hidden">
+        <div className="flex overflow-hidden">
           {lastName.split("").map((letter, index) => (
             <motion.span
               key={`${letter}-${index}`}
@@ -66,7 +66,7 @@ export default function InteractiveTitle({
                 stiffness: 300,
                 damping: 20,
               }}
-              className="inline-block flex-1 cursor-default select-none text-center text-[17vw] font-semibold leading-[0.82] tracking-[-0.08em] text-white sm:text-[16vw] lg:text-[11.5vw]"
+              className="inline-block cursor-default select-none text-[17vw] font-semibold leading-[0.82] tracking-[-0.08em] text-white sm:text-[16vw] lg:text-[10vw] xl:text-[9vw]"
             >
               {letter === " " ? "\u00A0" : letter}
             </motion.span>
