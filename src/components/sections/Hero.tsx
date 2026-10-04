@@ -1,22 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDownRight } from "lucide-react";
 
 import InteractiveBackground from "@/components/effects/InteractiveBackground";
 import InteractiveTitle from "@/components/effects/InteractiveTitle";
-import HeroHud, {
-  type HeroHudMode,
-} from "@/components/sections/HeroHud";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useProfile } from "@/hooks/useProfile";
 
 export default function Hero() {
   const { profile } = useProfile();
-
-  const [hudMode, setHudMode] =
-    useState<HeroHudMode>("default");
 
   const name =
     profile.name || "Anmol Kumar";
@@ -36,8 +29,8 @@ export default function Hero() {
       <InteractiveBackground />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-col px-4 pb-8 pt-28 sm:px-6 lg:px-10 lg:pt-32">
-        <div className="grid min-w-0 flex-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_310px]">
-          <div className="min-w-0">
+        <div className="flex min-w-0 flex-1 items-center">
+          <div className="w-full min-w-0">
             <motion.p
               initial={{
                 opacity: 0,
@@ -50,12 +43,6 @@ export default function Hero() {
               transition={{
                 duration: 0.6,
               }}
-              onMouseEnter={() =>
-                setHudMode("stack")
-              }
-              onMouseLeave={() =>
-                setHudMode("default")
-              }
               data-cursor="interactive"
               className="mb-5 w-fit text-xs uppercase tracking-[0.3em] text-cyan-400 sm:text-sm"
             >
@@ -78,12 +65,6 @@ export default function Hero() {
             >
               <InteractiveTitle
                 name={name}
-                onHoverStart={() =>
-                  setHudMode("identity")
-                }
-                onHoverEnd={() =>
-                  setHudMode("default")
-                }
               />
             </motion.div>
 
@@ -127,12 +108,6 @@ export default function Hero() {
               <MagneticButton>
                 <a
                   href="#projects"
-                  onMouseEnter={() =>
-                    setHudMode("projects")
-                  }
-                  onMouseLeave={() =>
-                    setHudMode("default")
-                  }
                   className="group flex items-center gap-3 border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-white/60 transition hover:border-cyan-400/30 hover:text-white"
                   data-cursor="interactive"
                 >
@@ -146,8 +121,6 @@ export default function Hero() {
               </MagneticButton>
             </motion.div>
           </div>
-
-          <HeroHud mode={hudMode} />
         </div>
 
         <motion.div
